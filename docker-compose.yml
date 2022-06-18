@@ -1,0 +1,34 @@
+version: "3.2"
+services:
+  ub_nfs:
+    image: ubuntu:focal
+    command:
+     - sleep
+     - '36500'
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "2"
+          memory: 2G
+#      placement:
+#        constraints:
+#          - node.hostname == swarm00
+    volumes:
+      - ub_local:/data
+#      - ub_ext:/data
+#      - ub_nfs:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      
+volumes:
+  ub_local:
+  ub_ext:
+    external: true
+  ub_nfs:
+    driver: local
+    driver_opts:
+      device: ':/mnt/tank/swarm/itarun/ub_nfs'
+      o: 'addr=truenas.ipv9.xyz,rw,noatime,rsize=8192,wsize=8192,tcp,timeo=14,nfsvers=4'
+      type: nfs
+      
